@@ -8,37 +8,38 @@ import NotFound from './NotFound';
 import Users from './Users.js';
 import AddUser from './AddUser.js';
 // npx json-server --watch data/db.json --port 8000
+
 function App() {
-  
-  return (
-    <Router>
-      <div className="App">
-        <Navbar />
-        <div className="content">
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/create">
-              <Create/>
-            </Route>
-            <Route path="/blogs/:id">
-              <BlogDetails />
-            </Route>
-            <Route path="/users">
-                <Users />
-            </Route>
-            <Route path="/AddUser">
-                <AddUser />
-            </Route>
-            <Route path="*">
-              <NotFound />
-            </Route>
-          </Switch>
-        </div>
-      </div>
-    </Router>
-  );
+
+    return (
+        <Router>
+            <div className="App">
+                <Navbar />
+                <div className="content">
+                    <Switch>
+                        <Route exact path="/">
+                            <Home />
+                        </Route>
+                        <Route path="/create">
+                            <Create />
+                        </Route>
+                        <Route path="/blogs/:id">
+                            <BlogDetails />
+                        </Route>
+                        <Route path="/users">
+                            <Users />
+                        </Route>
+                        <Route path="/AddUser">
+                            <AddUser />
+                        </Route>
+                        <Route path="*">
+                            <NotFound />
+                        </Route>
+                    </Switch>
+                </div>
+            </div>
+        </Router>
+    );
 }
 
 export default App;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
+import TextEditor from "./TextEditor";
 import useFetch from './useFetch';
 
 const Create = () => {
@@ -53,11 +54,17 @@ const Create = () => {
                     onChange={(e) => setTitle(e.target.value)}
                 />
                 <label>Blog body:</label>
-                <textarea
+                
+                {/* <textarea
                     required
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
-                ></textarea>
+                ></textarea> */}
+                
+                <br/>
+                <TextEditor setBody={setBody} />
+
+                <br/>
                 <label>Blog author:</label>
                 <select id="MyOptions"
                     value={author}
