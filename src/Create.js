@@ -62,7 +62,7 @@ const Create = () => {
                 ></textarea> */}
                 
                 <br/>
-                <TextEditor setBody={setBody} />
+                <TextEditor setBody={setBody} lastValue={''} />
 
                 <br/>
                 <label>Blog author:</label>
