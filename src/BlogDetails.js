@@ -23,7 +23,7 @@ const BlogDetails = () => {
                 <article>
                     <h2>{ blog.title }</h2>
                     <p>Written by <span>{blog.author}</span></p>
-                    <div> {blog.body} </div>
+                    <div dangerouslySetInnerHTML={{__html : blog.body}} />
                     <button onClick={handleClick}>delete</button>
                 </article>
             )}

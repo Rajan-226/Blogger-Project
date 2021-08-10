@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
+import Temp from "./Temp";
 import useFetch from './useFetch';
 
 const Create = () => {
@@ -54,11 +55,14 @@ const Create = () => {
                 />
                 <label>Blog body:</label>
                 
-                <textarea
+                {/* <textarea
                     required
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
-                ></textarea>
+                ></textarea> */}
+                <br/>
+                <Temp setBody={setBody} />
+                <br/>
 
                 <label>Blog author:</label>
                 <select id="MyOptions"

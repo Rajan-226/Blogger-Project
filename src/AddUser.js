@@ -1,18 +1,18 @@
 import React from 'react'
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
+import useFetch from './useFetch';
 
 const AddUser = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('');
     const [isPending, setIsPending] = useState(false);
     const history = useHistory();
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        
         const user = { name, description };
-
         setIsPending(true);
 
         fetch('http://localhost:8000/users', {
