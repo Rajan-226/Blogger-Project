@@ -62,7 +62,7 @@
   margin-bottom: 10px;
 }
 
-.blog-details div {
+.blog-details .create {
   margin: 20px 0;
 }
 .blog-details button {
@@ -73,7 +73,7 @@
   border-radius: 8px;
   cursor: pointer;
 }
-.blog-details span{
+.blog-details .authorName{
     font-size: 24px;
     color:#f1356d;
     font-weight: bold;

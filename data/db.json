@@ -1,15 +1,9 @@
 {
   "blogs": [
     {
-      "title": "Hello",
-      "body": "World",
       "author": "Rajan",
-      "id": 1
-    },
-    {
       "title": "New Features",
-      "body": "Change UI\n\nDuplicate author name \n\nLogin/Signup Feature\n\nLinking to some real database or cache of browser\n\nUsing some api to make \"writing blog box\" featurable\n(at least give it a feature to upload image)\n\nEditing the blog made already\n\nSomething unique feature\n\n\n",
-      "author": "Rajan",
+      "body": "<p>New edit</p>",
       "id": 2
     },
     {
@@ -31,10 +25,16 @@
       "id": 5
     },
     {
-      "title": "This is new Blog",
-      "body": "<p>This is first Line</p><p>This is <strong>Bold <em>italic <u>underline.</u></em></strong></p><p><strong><em><u>This is </u></em></strong><span style=\"color: rgb(230, 0, 0);\">red.</span></p><p><strong style=\"color: rgb(230, 0, 0);\">B</strong><strong>sadsadas<u>asdasd</u>assdas<em>asdasdas</em></strong></p>",
       "author": "Rajan",
+      "title": "This is new Blog",
+      "body": "<p>Ye kya ho gya</p>",
       "id": 6
+    },
+    {
+      "title": "Hello",
+      "body": "<p>World</p>",
+      "author": "Manuj",
+      "id": 7
     }
   ],
   "users": [
