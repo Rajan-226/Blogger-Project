@@ -1,6 +1,6 @@
 import { useHistory, useParams } from "react-router";
 import useFetch from "./useFetch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextEditor from "./TextEditor";
 //check use params
 
@@ -14,7 +14,11 @@ const BlogDetails = () => {
     const { id } = useParams();
     const { data: blog, isPending, error } = useFetch('http://localhost:8000/blogs/' + id);
     const history = useHistory();
-
+    
+    useEffect(() => {
+        if(blog)
+            setNewBody(blog.body);
+    }, [blog])
 
     const handleDelete = () => {
         fetch('http://localhost:8000/blogs/' + blog.id, {
@@ -27,6 +31,7 @@ const BlogDetails = () => {
 
     const handleEdit = () => {
         setEditingMode(true);
+        setNewBody(NewBody);
     }
 
     const handleSubmit = () => {
@@ -37,6 +42,7 @@ const BlogDetails = () => {
             title: blog.title,
             body: NewBody
         }).then(resp => {
+            setNewBody(NewBody);
             setEditingMode(false);
         }).catch(error => {
             console.log(error);
@@ -54,8 +60,8 @@ const BlogDetails = () => {
                     <p>Written by <span className="authorName">{blog.author}</span></p>
                     <br />
 
-                    {!editingMode && <div dangerouslySetInnerHTML={{ __html: blog.body }} />}
-                    {editingMode && <TextEditor setBody={setNewBody} lastValue={blog.body} />}
+                    {!editingMode && <div dangerouslySetInnerHTML={{ __html: NewBody}} />}
+                    {editingMode && <TextEditor setBody={setNewBody} lastValue={NewBody} />}
 
                     <br />
 
