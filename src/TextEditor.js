@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css'
 
-function Temp({ setBody }) {
+function TextEditor({ setBody }) {
   const [value, setValue] = useState('');
   
   useEffect(() => {
@@ -21,8 +21,7 @@ function Temp({ setBody }) {
       [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
       [{ 'direction': 'rtl' }],                         // text direction
 
-      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'header': [1, 2, 3, 4, 5, 6] }],
 
       [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
       [{ 'font': [] }],
@@ -40,4 +39,4 @@ function Temp({ setBody }) {
   );
 }
 
-export default Temp;
+export default TextEditor;

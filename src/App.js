@@ -7,7 +7,6 @@ import { useState } from 'react';
 import NotFound from './NotFound';
 import Users from './Users.js';
 import AddUser from './AddUser.js';
-import Temp from './Temp.js';
 // npx json-server --watch data/db.json --port 8000
 
 function App() {
@@ -32,9 +31,6 @@ function App() {
                         </Route>
                         <Route path="/AddUser">
                             <AddUser />
-                        </Route>
-                        <Route path="/Temp">
-                            <Temp />
                         </Route>
                         <Route path="*">
                             <NotFound />
