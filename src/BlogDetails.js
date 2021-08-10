@@ -7,7 +7,6 @@ const BlogDetails = () => {
     const { data : blog, isPending, error} = useFetch('http://localhost:8000/blogs/' + id);
     const history = useHistory();
     
-    
     const handleClick = () => {
         fetch('http://localhost:8000/blogs/' + blog.id, {
             method : 'DELETE'
@@ -23,7 +22,7 @@ const BlogDetails = () => {
             { blog && (
                 <article>
                     <h2>{ blog.title }</h2>
-                    <p>Written by {blog.author}</p>
+                    <p>Written by <span>{blog.author}</span></p>
                     <div> {blog.body} </div>
                     <button onClick={handleClick}>delete</button>
                 </article>

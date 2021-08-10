@@ -6,16 +6,19 @@
   font-family: "Quicksand";
   color: #333;
 }
+
 .navbar {
   padding: 20px;
   display: flex;
   align-items: center;
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
   border-bottom: 1px solid #f2f2f2;
 }
-.navbar h1 {
+
+.navbar .main {
   color: #f1356d;
+  font-size:30px;
 }
 .navbar .links {
   margin-left: auto;
@@ -54,7 +57,7 @@
 
 /* blog details page */
 .blog-details h2 {
-  font-size: 20px;
+  font-size: 30px;
   color:#f1356d;
   margin-bottom: 10px;
 }
@@ -70,10 +73,15 @@
   border-radius: 8px;
   cursor: pointer;
 }
+.blog-details span{
+    font-size: 24px;
+    color:#f1356d;
+    font-weight: bold;
+}
 
 /* create new blog form */
 .create {
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
   text-align: center;
 }
@@ -102,3 +110,29 @@
   border-radius: 8px;
   cursor: pointer;
 }
+.not-found h1{
+    color: #f1356d;
+    font-size:100px;
+}
+.not-found p{
+    font-size:30px;
+}
+.userName{
+    color: #f1356d;
+    font-size:25px;
+    margin-bottom: 5px;
+}
+.userDescription{
+    color:gray;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.userDelete {
+    background: #f1356d;
+    color: #fff;
+    border: 0;
+    padding: 6px;
+    border-radius: 8px;
+    margin-bottom: 55px;
+    cursor: pointer;
+  }
