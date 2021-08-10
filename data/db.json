@@ -2,14 +2,8 @@
   "blogs": [
     {
       "author": "Rajan",
-      "title": "New Features",
-      "body": "<p>New edit</p>",
-      "id": 2
-    },
-    {
       "title": "Issue",
-      "body": "I typed everything in newline but text came in only one line in the blog",
-      "author": "Rajan",
+      "body": "<p>Ab toh ho gya</p>",
       "id": 3
     },
     {

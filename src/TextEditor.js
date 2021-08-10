@@ -24,7 +24,6 @@ function TextEditor({ setBody, lastValue }) {
             [{ 'header': [1, 2, 3, 4, 5, 6] }],
 
             [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-            [{ 'font': [] }],
             [{ 'align': [] }],
 
             ['link', 'image'],

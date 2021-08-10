@@ -2,16 +2,14 @@ import { useHistory, useParams } from "react-router";
 import useFetch from "./useFetch";
 import { useState, useEffect } from "react";
 import TextEditor from "./TextEditor";
-//check use params
-
-// TODO: fetch
 
 const BlogDetails = () => {
 
     const [editingMode, setEditingMode] = useState(false);
     const [NewBody, setNewBody] = useState(null);
 
-    const { id } = useParams();
+    const { id } = useParams(); //picks the id from the link
+
     const { data: blog, isPending, error } = useFetch('http://localhost:8000/blogs/' + id);
     const history = useHistory();
     
