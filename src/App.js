@@ -7,7 +7,11 @@ import { useState } from 'react';
 import NotFound from './NotFound';
 import Users from './Users.js';
 import AddUser from './AddUser.js';
+
 // npx json-server --watch data/db.json --port 8000
+
+// var x= "<p>Hello</p>"
+// <div dangerouslySetInnerHTML={{ __html: x }} />
 
 function App() {
 

@@ -54,17 +54,17 @@ const Create = () => {
                     onChange={(e) => setTitle(e.target.value)}
                 />
                 <label>Blog body:</label>
-                
+
                 {/* <textarea
                     required
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                 ></textarea> */}
-                
-                <br/>
+
+                <br />
                 <TextEditor setBody={setBody} lastValue={''} />
 
-                <br/>
+                <br />
                 <label>Blog author:</label>
                 <select id="MyOptions"
                     value={author}

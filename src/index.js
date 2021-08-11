@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 
-// var x="<p>Hello</p>"
-// <div dangerouslySetInnerHTML={{ __html: x }} />
-
 ReactDOM.render(
     <React.StrictMode>
         <App />
