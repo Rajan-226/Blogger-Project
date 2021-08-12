@@ -2,50 +2,50 @@ import { useHistory, useParams } from "react-router";
 import useFetch from "./useFetch";
 import { useState, useEffect } from "react";
 import TextEditor from "./TextEditor";
+import firebase from "./firebase";
 
 const BlogDetails = () => {
 
+    const [isPending, setIsPending] = useState(true);
+    const [error, setError] = useState(null);
     const [editingMode, setEditingMode] = useState(false);
     const [NewBody, setNewBody] = useState(null);
+    const [blog, setBlog] = useState(null);
 
     const { id } = useParams(); //picks the id from the link
+    const database = firebase.database().ref('blogs/' + id);
 
-    const { data: blog, isPending, error } = useFetch('http://localhost:8000/blogs/' + id);
     const history = useHistory();
     
     useEffect(() => {
-        if(blog)
-            setNewBody(blog.body);
-    }, [blog])
+        
+        setIsPending(true);
+        
+        database.on('value', (snapshot) => {
+            setBlog(snapshot.val());
+            setIsPending(false);
+        });
+        
+    }, []);
 
     const handleDelete = () => {
-        fetch('http://localhost:8000/blogs/' + blog.id, {
-            method: 'DELETE'
-        }).then(() => {
-            history.push('/');
-        });
+        
+        database.remove();
+        history.push('/');
     }
 
 
     const handleEdit = () => {
         setEditingMode(true);
-        setNewBody(NewBody);
     }
 
     const handleSubmit = () => {
-        const axios = require('axios');
-
-        axios.put('http://localhost:8000/blogs/' + blog.id, {
-            author: blog.author,
-            title: blog.title,
+        
+        database.update({
             body: NewBody
-        }).then(resp => {
-            setNewBody(NewBody);
-            setEditingMode(false);
-        }).catch(error => {
-            console.log(error);
         });
-
+        
+        setEditingMode(false);
     }
 
     return (
@@ -58,8 +58,8 @@ const BlogDetails = () => {
                     <p>Written by <span className="authorName">{blog.author}</span></p>
                     <br />
 
-                    {!editingMode && <div dangerouslySetInnerHTML={{ __html: NewBody}} />}
-                    {editingMode && <TextEditor setBody={setNewBody} lastValue={NewBody} />}
+                    {!editingMode && <div dangerouslySetInnerHTML={{ __html: blog.body}} />}
+                    {editingMode && <TextEditor setBody={setNewBody} lastValue={blog.body} />}
 
                     <br />
 
