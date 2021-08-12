@@ -13,6 +13,8 @@ const Create = () => {
     const [optionItems, setOptionItems] = useState(null);
     const history = useHistory();
 
+    const { data: users, isPendingo, error } = useFetch('http://localhost:8000/users');
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -30,7 +32,7 @@ const Create = () => {
 
         const blogRef = firebase.database().ref('blogs');
         blogRef.push(blog);
-        
+
         setIsPending(false);
         history.push('/');
     }
