@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import TextEditor from "./TextEditor";
 import useFetch from './useFetch';
+import firebase from "./firebase";
 
 const Create = () => {
-
     const [title, setTitle] = useState(null);
     const [body, setBody] = useState(null);
     const [author, setAuthor] = useState(null);
@@ -17,20 +17,24 @@ const Create = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const blog = { title, body, author };
+
+        if (author == null) {
+            return;
+        }
+
+        const blog = {
+            title: title,
+            body: body,
+            author: author
+        };
 
         setIsPending(true);
 
-        fetch('http://localhost:8000/blogs', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(blog)
-        }).then(() => {
-            console.log("new blog added");
-            console.log(blog);
-            setIsPending(false);
-            history.push('/');
-        });
+        const blogRef = firebase.database().ref('blogs');
+        blogRef.push(blog);
+
+        setIsPending(false);
+        history.push('/');
     }
 
     if (users && !optionLoaded) {
@@ -54,12 +58,6 @@ const Create = () => {
                     onChange={(e) => setTitle(e.target.value)}
                 />
                 <label>Blog body:</label>
-
-                {/* <textarea
-                    required
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                ></textarea> */}
 
                 <br />
                 <TextEditor setBody={setBody} lastValue={''} />
