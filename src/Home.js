@@ -2,12 +2,14 @@ import BlogList from './BlogList';
 import useFetch from './useFetch';
 import firebase from './firebase';
 import { useState, useEffect } from 'react';
+import { useAuth } from './provider/AuthContext';
 
 const Home = () => {
 
     const [blogs, setBlogs] = useState(null);
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(true);
+    const { currentUser } = useAuth();
     
     useEffect(() => {
         setIsPending(true);
@@ -37,6 +39,7 @@ const Home = () => {
     return (
         
         <div className="home">
+            {currentUser && currentUser.displayName}
             {/* Failed to fetch will come, when you have not linked your db */}
             {error && <div>{error}</div>}
             {/* It will show Loading... in fetching period */}

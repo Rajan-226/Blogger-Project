@@ -3,8 +3,11 @@ import { useHistory } from 'react-router-dom';
 import TextEditor from "./TextEditor";
 import useFetch from './useFetch';
 import firebase from "./firebase";
+import { useAuth } from './provider/AuthContext';
 
 const Create = () => {
+    const { currentUser} = useAuth();
+
     const [title, setTitle] = useState(null);
     const [body, setBody] = useState(null);
     const [author, setAuthor] = useState(null);
@@ -25,7 +28,7 @@ const Create = () => {
         const blog = {
             title: title,
             body: body,
-            author: author
+            author: currentUser.displayName,
         };
 
         setIsPending(true);
@@ -37,16 +40,17 @@ const Create = () => {
         history.push('/');
     }
 
-    if (users && !optionLoaded) {
-        setOptionItems(() => users.map((user) => {
-            console.log(user);
-            return (<option value={user.name}>{user.name}</option>);
-        })
-        );
-        setOptionLoaded(true);
-    }
+    // if (users && !optionLoaded) {
+    //     setOptionItems(() => users.map((user) => {
+    //         console.log(user);
+    //         return (<option value={user.name}>{user.name}</option>);
+    //     })
+    //     );
+    //     setOptionLoaded(true);
+    // }
 
     return (
+        
         <div className="create">
             <h2>Add a new Blog</h2>
             <form onSubmit={handleSubmit}>
@@ -57,14 +61,14 @@ const Create = () => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
+                <br/>
                 <label>Blog body:</label>
-
-                <br />
+                <br/>
                 <TextEditor setBody={setBody} lastValue={''} />
 
                 <br />
-                <label>Blog author:</label>
-                <select id="MyOptions"
+                {/* <label>Blog author:</label> */}
+                {/* <select id="MyOptions"
                     value={author}
                     required
                     onChange={(e) => {
@@ -78,8 +82,8 @@ const Create = () => {
                             <option disabled selected value>No authors</option>
                     }
 
-                    {optionItems}
-                </select>
+                    
+                </select> */}
                 {!isPending && <button>Add Blog</button>}
                 {isPending && <button disabled>Adding Blog...</button>}
             </form>
