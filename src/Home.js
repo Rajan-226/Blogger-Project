@@ -1,5 +1,4 @@
 import BlogList from './BlogList';
-import useFetch from './useFetch';
 import firebase from './firebase';
 import { useState, useEffect } from 'react';
 import { useAuth } from './provider/AuthContext';
@@ -33,13 +32,11 @@ const Home = () => {
             setError(errorObject.name);
             setIsPending(false);
         });
-        
     }, []);
     
     return (
         
         <div className="home">
-            {currentUser && currentUser.displayName}
             {/* Failed to fetch will come, when you have not linked your db */}
             {error && <div>{error}</div>}
             {/* It will show Loading... in fetching period */}
