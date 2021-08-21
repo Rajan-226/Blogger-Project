@@ -1,8 +1,8 @@
 import { useHistory, useParams } from "react-router";
-import useFetch from "./useFetch";
 import { useState, useEffect } from "react";
 import TextEditor from "./TextEditor";
 import firebase from "./firebase";
+import { useAuth } from './provider/AuthContext';
 
 const BlogDetails = () => {
 
@@ -11,25 +11,25 @@ const BlogDetails = () => {
     const [editingMode, setEditingMode] = useState(false);
     const [NewBody, setNewBody] = useState(null);
     const [blog, setBlog] = useState(null);
+    const { currentUser } = useAuth();
 
     const { id } = useParams(); //picks the id from the link
     const database = firebase.database().ref('blogs/' + id);
 
     const history = useHistory();
-    
+
     useEffect(() => {
-        
+
         setIsPending(true);
-        
+
         database.on('value', (snapshot) => {
             setBlog(snapshot.val());
             setIsPending(false);
         });
-        
+
     }, []);
 
     const handleDelete = () => {
-        
         database.remove();
         history.push('/');
     }
@@ -40,11 +40,10 @@ const BlogDetails = () => {
     }
 
     const handleSubmit = () => {
-        
         database.update({
             body: NewBody
         });
-        
+
         setEditingMode(false);
     }
 
@@ -58,17 +57,18 @@ const BlogDetails = () => {
                     <p>Written by <span className="authorName">{blog.author}</span></p>
                     <br />
 
-                    {!editingMode && <div dangerouslySetInnerHTML={{ __html: blog.body}} />}
+                    {!editingMode && <div dangerouslySetInnerHTML={{ __html: blog.body }} />}
                     {editingMode && <TextEditor setBody={setNewBody} lastValue={blog.body} />}
 
                     <br />
 
-                    {!editingMode && <button onClick={handleEdit}>Edit</button>}
-                    {editingMode && <button onClick={handleSubmit}>Submit</button>}
+                    {currentUser && currentUser.uid === blog.id && !editingMode && <button onClick={handleEdit}>Edit</button>}
+                    {currentUser && currentUser.uid === blog.id && editingMode && <button onClick={handleSubmit}>Submit</button>}
 
                     {' '}
 
-                    <button onClick={handleDelete}>Delete</button>
+                    {currentUser && currentUser.uid === blog.id && <button onClick={handleDelete}>Delete</button>}
+
                 </article>
             )}
         </div>

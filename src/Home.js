@@ -1,13 +1,14 @@
 import BlogList from './BlogList';
-import useFetch from './useFetch';
 import firebase from './firebase';
 import { useState, useEffect } from 'react';
+import { useAuth } from './provider/AuthContext';
 
 const Home = () => {
 
     const [blogs, setBlogs] = useState(null);
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(true);
+    const { currentUser } = useAuth();
     
     useEffect(() => {
         setIsPending(true);
@@ -31,7 +32,6 @@ const Home = () => {
             setError(errorObject.name);
             setIsPending(false);
         });
-        
     }, []);
     
     return (
