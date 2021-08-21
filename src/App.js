@@ -9,9 +9,7 @@ import Login from './Login';
 import Signup from './Signup';
 import { AuthProvider } from './provider/AuthContext';
 
-
 function App() {
-
     return (
         <Router>
             <div className="App">
@@ -19,28 +17,12 @@ function App() {
                     <Navbar />
                     <div className="content">
                         <Switch>
-                            <Route exact path="/" >
-                                <Home />
-                            </Route>
-
-                            <PrivateRoute wantUser={false} path="/login">
-                                <Login />
-                            </PrivateRoute>
-
-                            <PrivateRoute wantUser={false} path="/signup">
-                                <Signup />
-                            </PrivateRoute>
-
+                            <Route component={Home} exact path="/" />
+                            <PrivateRoute wantUser={false} component={Login} path="/login" />
+                            <PrivateRoute wantUser={false} component={Signup} path="/signup" />
                             <PrivateRoute wantUser={true} component={Create} path="/create" />
-
-                            <Route path="/blogs/:id">
-                                <BlogDetails />
-                            </Route>
-
-                            <Route path="*">
-                                <NotFound />
-                            </Route>
-
+                            <Route component={BlogDetails} path="/blogs/:id" />
+                            <Route component={NotFound} path="*" />
                         </Switch>
                     </div>
                 </AuthProvider>

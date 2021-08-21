@@ -6,8 +6,6 @@ const Navbar = () => {
 
     const { currentUser, logout } = useAuth();
     
-    console.log(currentUser);
-    
     function handleLogout(e) {
         e.preventDefault();
         logout();

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Pane, TextInputField, Heading, Alert } from 'evergreen-ui';
 import { Link } from 'react-router-dom';
 import { useAuth } from './provider/AuthContext';
@@ -12,7 +12,7 @@ function Signup() {
     const confirmPasswordRef = useRef();
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const { signup, currentUser, updateName } = useAuth();
+    const { signup } = useAuth();
 
     const history = useHistory();
 
@@ -23,33 +23,16 @@ function Signup() {
             return setError('Password do not match');
         }
 
-        console.log(emailRef);
-        console.log(emailRef.current.value);
-        console.log(passwordRef.current.value);
-        console.log(nameRef.current.value);
         setIsLoading(true);
         setError("");
 
-        await signup(emailRef.current.value, passwordRef.current.value)
+        await signup(emailRef.current.value, passwordRef.current.value, nameRef.current.value)
+            .then(() => history.push('/'))
             .catch((error) => {
                 setIsLoading(false);
                 return setError(error.message);
             })
     }
-
-    useEffect(async () => {
-        if (currentUser) {
-            await updateName(nameRef.current.value)
-                .then(() => {
-                    setTimeout(1000);       //to wait for name to update
-                    history.push('/')
-                })
-                .catch((error) => {
-                    setIsLoading(false);
-                    return setError(error.message);
-                });
-        }
-    }, [currentUser])
 
     return (
         <div>

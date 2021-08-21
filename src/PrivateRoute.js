@@ -4,7 +4,6 @@ import { useAuth } from "./provider/AuthContext"
 
 export default function PrivateRoute({ wantUser, component: Component, ...rest }) {
     const { currentUser } = useAuth()
-
     return (
         <>
             {
@@ -15,7 +14,11 @@ export default function PrivateRoute({ wantUser, component: Component, ...rest }
                             return currentUser ? <Component {...props} /> : <Redirect to="/login" />
                         }}
                     /> :
-                    <Redirect to="/" />
+                    <Route {...rest}
+                        render={props => {
+                            return currentUser ? <Redirect to="/" /> : <Component {...props} />
+                        }}
+                    />
             }
         </>
     )

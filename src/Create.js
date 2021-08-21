@@ -7,8 +7,8 @@ import { useAuth } from './provider/AuthContext';
 const Create = () => {
     const { currentUser } = useAuth();
 
-    const [title, setTitle] = useState(null);
-    const [body, setBody] = useState(null);
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
     const [isPending, setIsPending] = useState(false);
     const history = useHistory();
 
@@ -46,7 +46,7 @@ const Create = () => {
                 <br />
                 <label>Blog body:</label>
                 <br />
-                
+
                 <TextEditor setBody={setBody} lastValue={''} />
                 <br />
 
