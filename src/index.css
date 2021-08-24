@@ -65,7 +65,7 @@
 .blog-details .create {
   margin: 20px 0;
 }
-.blog-details button {
+.blog-details #delEdit {
   background: #f1356d;
   color: #fff;
   border: 0;
