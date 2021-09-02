@@ -56,7 +56,7 @@ const Home = () => {
                 {getSkeleton()}
                 {getSkeleton()}
             </div>}
-            {blogs && <BlogList blogs={blogs} title="All Blogs" />}
+            {blogs && <BlogList blogs={blogs} title="" />}
 
         </div>
     );

@@ -5,6 +5,8 @@ import { useAuth } from './provider/AuthContext';
 import { Box, Button, Input, Divider, Alert, AlertIcon } from '@chakra-ui/react';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ErrorIcon from '@material-ui/icons/Error';
+import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react"
+
 
 function Login() {
 
@@ -14,12 +16,14 @@ function Login() {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
-
+    
+    const customTheme = extendTheme(withDefaultColorScheme({ colorScheme: "#EBEBEB" }));
+    
     async function handleSubmit(e) {
         e.preventDefault();
 
         setIsLoading(true);
-        
+
         try {
             setError("");
             await login(emailRef.current.value, passwordRef.current.value);
@@ -34,20 +38,21 @@ function Login() {
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <form onSubmit={handleSubmit}>
-                <Box display="flex" borderWidth="2px" paddingBottom="10px" borderRadius="10px" paddingLeft="30px" paddingRight="30px" height="45vh" width="50vh" flexDirection="column" alignItems="center" justifyContent="space-evenly" maxW="sm" overflow="hidden">
-                    { error.length > 0 && <Alert status="error" variant="left-accent">
+                <Box background="#EBEBEB" display="flex" borderWidth="2px" paddingBottom="10px" borderRadius="10px" paddingLeft="30px" paddingRight="30px" height="60vh" width="60vh" flexDirection="column" alignItems="center" justifyContent="space-evenly" maxW="sm" overflow="hidden">
+                    {error.length > 0 && <Alert status="error" variant="left-accent">
                         <ErrorIcon style={{ fill: 'red' }} />
                         {error}
                     </Alert>}
-                    <span style={{fontSize: '30px', fontWeight: 'bold'}}>Log In</span>
-                    <Input ref={emailRef} type="email" placeholder="Email" />
-                    <Input ref={passwordRef} type="password" placeholder="Password" />
+                    <span style={{ fontSize: '30px', fontWeight: 'bold', background: '#EBEBEB' }}>LOGIN</span>
+                    <Input borderColor="" ref={emailRef} type="email" placeholder="Email" />
+                    <Input borderColor="" ref={passwordRef} type="password" placeholder="Password" />
 
-                    <Button _hover={{ bg: '#434e7d' }} type="submit" isLoading={isLoading} justifyContent="space-between" background="#000E4A" color="white" width="100%" rightIcon={ <ArrowForwardIosIcon style={{ fill:'white' }} /> }>Log In</Button>
-                    <Divider />
-                    <Link to="/signup">Need an account?</Link>
+                    <div style={{ width: "100%", background:"#EBEBEB", display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", marginTop: '10px' }}>
+                        <Button display="flex" _hover={{ bg: '#F05454' }} type="submit" isLoading={isLoading}  justifyContent="center" background="#000E4A" color="white" width="100%" height="50px" fontSize="20px">Log In</Button>
+                        <Link style={{ marginTop: '15px' }} to="/signup">Need an account?</Link>
+                    </div>
                 </Box>
-            </form> 
+            </form>
         </div>
     )
 }

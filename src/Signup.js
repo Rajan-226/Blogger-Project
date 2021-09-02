@@ -48,40 +48,22 @@ function Signup() {
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-            {/* <form onSubmit={handleSubmit}>
-                <Pane elevation={1} display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
-                    <Heading size={900} marginBottom={10}>Sign Up</Heading>
-                    <Pane display="flex" paddingLeft="30px" type="email" paddingRight="30px" marginBottom="10px" flexDirection="column" width="100%" justifyContent="flex-start">
-                        {error.length > 0 && <Alert title={error} intent="danger" marginBottom={10} />}
-
-                        <TextInputField ref={nameRef} width="100%" label="Full Name" placeholder="Please Enter Full name" required />
-                        <TextInputField ref={emailRef} width="100%" label="Email" placeholder="Please Enter email" required />
-                        <TextInputField ref={passwordRef} width="100%" type="password" label="Password" placeholder="Please Enter Password" required />
-
-                        <TextInputField ref={confirmPasswordRef} width="100%" type="password" label="Confirm Password" placeholder="Please Enter Confirm Password" required />
-
-                        <Button disabled={isLoading} appearance="primary" intent="success">Sign Up</Button>
-                    </Pane>
-                    <Pane marginBottom={30}>
-                        Already have an account? <Link to="/login">Log In</Link>
-                    </Pane>
-                </Pane>
-            </form> */}
             <form onSubmit={handleSubmit}>
-                <Box display="flex" borderWidth="2px" paddingBottom="30px" borderRadius="10px" paddingLeft="30px" paddingRight="30px" height="60vh" width="50vh" flexDirection="column" alignItems="center" justifyContent="space-evenly" maxW="sm" overflow="hidden">
+                <Box background="#EBEBEB" display="flex" borderWidth="2px" paddingBottom="10px" borderRadius="10px" paddingLeft="30px" paddingRight="30px" height="70vh" width="60vh" flexDirection="column" alignItems="center" justifyContent="space-evenly" maxW="sm" overflow="hidden">
                     {error.length > 0 && <Alert status="error" variant="left-accent">
                         <ErrorIcon style={{ fill: 'red' }} />
                         {error}
                     </Alert>}
-                    <span style={{ fontSize: '30px', fontWeight: 'bold' }}>Sign up</span>
-                    <Input ref={emailRef} type="email" placeholder="Email" />
-                    <Input ref={nameRef} type="text" placeholder="Name" />
-                    <Input ref={passwordRef} type="password" placeholder="Password" />
-                    <Input ref={confirmPasswordRef} type="password" placeholder="Confirm Password" />
+                    <span style={{ background: "#EBEBEB", fontSize: '30px', fontWeight: 'bold' }}>Sign up</span>
+                    <Input borderColor="" ref={emailRef} type="email" placeholder="Email" />
+                    <Input borderColor="" ref={nameRef} type="text" placeholder="Name" />
+                    <Input borderColor="" ref={passwordRef} type="password" placeholder="Password" />
+                    <Input borderColor="" ref={confirmPasswordRef} type="password" placeholder="Confirm Password" />
 
-                    <Button _hover={{ bg: '#4089ff' }} type="submit" isLoading={isLoading} justifyContent="space-between" background="#0061FF" color="white" width="100%" rightIcon={<ArrowForwardIosIcon style={{ fill: 'white' }} />}>Sign up</Button>
-                    <Divider />
-                    <Link to="/login">Already have an account?</Link>
+                    <div style={{ width: "100%", background: "#EBEBEB", display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", marginTop: '10px' }}>
+                    <Button display="flex" _hover={{ bg: '#F05454' }} type="submit" isLoading={isLoading}  justifyContent="center" background="#000E4A" color="white" width="100%" height="50px" fontSize="20px">Sign Up</Button>
+                        <Link style={{ marginTop: '10px' }} to="/login">Already have an account?</Link>
+                    </div>
                 </Box>
             </form>
         </div>

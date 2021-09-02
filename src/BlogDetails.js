@@ -6,6 +6,7 @@ import { useAuth } from './provider/AuthContext';
 import { ThumbsUpIcon, ThumbsDownIcon, toaster, Pane, SendMessageIcon} from 'evergreen-ui'
 import { Input, InputGroup, InputRightElement, Button } from "@chakra-ui/react"
 import { Skeleton } from '@chakra-ui/react';
+import { EditIcon, DeleteIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 const BlogDetails = () => {
 
@@ -181,10 +182,10 @@ const BlogDetails = () => {
                     {
                         currentUser && currentUser.uid === blog.id &&
                         <>
-                            {!editingMode && <button id="delEdit" onClick={handleEdit}>Edit</button>}
-                            {editingMode && <button id="delEdit" onClick={handleSubmit}>Submit</button>}
+                            {!editingMode && <Button size="md" bgColor="#30475E" color="white" leftIcon={<EditIcon />}  onClick={handleEdit}>Edit</Button>}
+                            {editingMode && <Button rightIcon={<ChevronRightIcon h="10" />} onClick={handleSubmit}>Submit</Button>}
                             &emsp;
-                            <button id="delEdit" onClick={handleDelete}>Delete</button>
+                            <Button leftIcon={<DeleteIcon />} onClick={handleDelete}>Delete</Button>
                             <br /><br /><br />
 
                         </>

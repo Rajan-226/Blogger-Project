@@ -15,7 +15,7 @@ function App() {
     return (
         <ChakraProvider >
             <Router>
-                <div className="App">
+                <div className="App" >
                     <AuthProvider>
                         <Navbar />
                         <div className="content">
@@ -31,7 +31,7 @@ function App() {
                     </AuthProvider>
                 </div >
             </Router >
-        // </ChakraProvider >
+         </ChakraProvider >
     );
 }
 
