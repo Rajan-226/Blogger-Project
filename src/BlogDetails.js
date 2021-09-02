@@ -3,7 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import TextEditor from "./TextEditor";
 import firebase from "./firebase";
 import { useAuth } from './provider/AuthContext';
-import { ThumbsUpIcon, ThumbsDownIcon, toaster, Pane, SendMessageIcon, TextInputField } from 'evergreen-ui'
+import { ThumbsUpIcon, ThumbsDownIcon, toaster, Pane, SendMessageIcon} from 'evergreen-ui'
+import { Input, InputGroup, InputRightElement, Button } from "@chakra-ui/react"
+import { Skeleton } from '@chakra-ui/react';
 
 const BlogDetails = () => {
 
@@ -16,6 +18,8 @@ const BlogDetails = () => {
     const database = firebase.database().ref('blogs/' + id);
     const history = useHistory();
     const commentRef = useRef('');
+    const [likeColor, setLikeColor] = useState("gray");
+    const [dislikeColor, setDislikeColor] = useState("gray");
 
     useEffect(() => {
 
@@ -28,11 +32,25 @@ const BlogDetails = () => {
 
     }, []);
 
+    useEffect(() => {
+        if (!currentUser || !blog) return;
+
+        let likes = blog.likes;
+        let dislikes = blog.dislikes;
+
+        if (likes.indexOf(currentUser.uid) != -1) {
+            setLikeColor("blue");
+        } else if (dislikes.indexOf(currentUser.uid) != -1) {
+            setDislikeColor("blue");
+        }
+
+    }, [currentUser, database]);
+
+
     const handleDelete = () => {
         database.remove();
         history.push('/');
     }
-
 
     const handleEdit = () => {
         setEditingMode(true);
@@ -46,7 +64,7 @@ const BlogDetails = () => {
         setEditingMode(false);
     }
 
-    function addComment(e) {
+    function pushCommentToDatabase(e) {
         e.preventDefault();
         if (commentRef.current.value.length === 0) {
             toaster.warning('Comment cannot be empty', { id: 'forbidden-action' });
@@ -68,14 +86,25 @@ const BlogDetails = () => {
         e.target.reset();
     }
 
-    function handleOpinion(opinion) {
+    function likeOrDislike(choice) {
+        if (!currentUser) {
+            toaster.warning('Please log in first to ' + choice + ' this blog', { id: 'forbidden-action' });
+            return;
+        }
+        if (currentUser.uid === blog.id) {
+            toaster.warning('You cannot ' + choice + ' your own blog', { id: 'forbidden-action' });
+            return;
+        }
+
         let likes = blog.likes;
         let dislikes = blog.dislikes;
+
         if (likes.indexOf(currentUser.uid) != -1 || dislikes.indexOf(currentUser.uid) != -1) {
             toaster.warning('You cannot vote twice', { id: 'forbidden-action' });
             return;
         }
-        if (opinion === 1) {
+
+        if (choice === "like") {
             likes.push(currentUser.uid);
             database.update({
                 likes: likes
@@ -88,52 +117,67 @@ const BlogDetails = () => {
         }
     }
 
+    function showAndGetComments() {
+        return (
+            <>
+                {
+                    blog.comments.map((comment, i) => {
+                        if (i)
+                            return (
+                                <Pane elevation={1} height="50px" marginTop="10px" display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
+                                    {comment[0] + " written by " + comment[1]}
+                                </Pane>
+                            )
+                    })
+                }
+                <form onSubmit={pushCommentToDatabase} >
+                    <InputGroup size="md" marginTop="20px">
+                        <Input
+                            ref={commentRef}
+                            pr="4.5rem"
+                            placeholder="Enter your comment"
+                        />
+                        <InputRightElement width="4.5rem">
+                            <Button type="submit" h="1.75rem" size="sm">
+                                <SendMessageIcon cursor="pointer" size={15} />
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                </form>
+            </>
+
+        );
+    }
+
+    function getSkeleton() {
+        return (<div className="blog-preview">
+            <Skeleton height="30px" width="100%" marginBottom="20px" />
+            <Skeleton height="200px" width="100%" marginBottom="20px" />
+            <Skeleton height="100px" width="100%" />
+        </div>)
+    }
+
     return (
         <div className="blog-details">
-            {isPending && <div>Loading...</div>}
+            {isPending && <div>{getSkeleton()}</div>}
             {blog && (
                 <>
                     <article>
                         <h2>{blog.title}</h2>
                         <p>Written by <span className="authorName">{blog.author}</span></p><br />
                         {editingMode && <TextEditor setBody={setNewBody} lastValue={blog.body} />}
-                        {!editingMode && <div dangerouslySetInnerHTML={{ __html: blog.body }} />}
+                        {
+                            !editingMode &&
+                            <Pane
+                                elevation={3} height="50px" border="default" display="flex"
+                                padding="10px"
+                                alignItems="center"
+                                dangerouslySetInnerHTML={{ __html: blog.body }} />
+                        }
                     </article>
 
                     <br />
-                    {
-                        !currentUser &&
-                        <>
-                            <ThumbsUpIcon cursor="pointer" onClick={() => toaster.warning('Please log in first to like this blog', { id: 'forbidden-action' })} size={40} />
-                            &emsp;{blog.likes && blog.likes.length - 1}
-                            &emsp;&emsp;
-                            <ThumbsDownIcon cursor="pointer" onClick={() => toaster.warning('Please log in first to unlike this blog', { id: 'forbidden-action' })} size={40} />
-                            &emsp;{blog.dislikes.length - 1}
 
-                            <br />
-                            <br />
-                            <br />
-                            <h1>Comments</h1>
-                            {
-                                blog.comments && blog.comments.map((comment, i) => {
-                                    if (i)
-                                        return (
-                                            <Pane elevation={3} height="50px" marginTop="10px" display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
-                                                {comment[0] + " written by " + comment[1]}
-                                            </Pane>
-                                        )
-                                })
-                            }
-                            <form onSubmit={addComment} >
-                                <Pane display="flex" justifyContent="center" alignItems="center" border="2px solid black" marginTop="30px">
-                                    <TextInputField ref={commentRef} width="80%" height="1" placeholder="Enter your comment" />
-                                    &emsp;
-                                    <button type="submit"><SendMessageIcon cursor="pointer" size={35} /></button>
-                                </Pane>
-                            </form>
-
-                        </>
-                    }
                     {
                         currentUser && currentUser.uid === blog.id &&
                         <>
@@ -143,75 +187,27 @@ const BlogDetails = () => {
                             <button id="delEdit" onClick={handleDelete}>Delete</button>
                             <br /><br /><br />
 
-                            <ThumbsUpIcon cursor="pointer" onClick={() => toaster.warning('You cannot like your own blog', { id: 'forbidden-action' })} size={40} />
-                            &emsp;{blog.likes && blog.likes.length - 1}
-                            &emsp;&emsp;
-                            <ThumbsDownIcon cursor="pointer" onClick={() => toaster.warning('You cannot unlike your own blog', { id: 'forbidden-action' })} size={40} />
-                            &emsp;{blog.dislikes.length - 1}
-
-                            <br />
-                            <br />
-                            <br />
-                            <h1>Comments</h1>
-
-                            {
-                                blog.comments.map((comment, i) => {
-                                    if (i)
-                                        return (
-                                            <Pane elevation={3} height="50px" marginTop="10px" display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
-                                                {comment[0] + " written by " + comment[1]}
-                                            </Pane>
-                                        )
-                                })
-                            }
-
-                            <form onSubmit={addComment} >
-                                <Pane display="flex" justifyContent="center" alignItems="center" border="2px solid black" marginTop="30px">
-                                    <TextInputField ref={commentRef} width="80%" height="1" placeholder="Enter your comment" />
-                                    &emsp;
-                                    <button type="submit"><SendMessageIcon cursor="pointer" size={35} /></button>
-                                </Pane>
-                            </form>
                         </>
                     }
-                    {
-                        currentUser && currentUser.uid !== blog.id &&
-                        <>
-                            <ThumbsUpIcon cursor="pointer" onClick={() => handleOpinion(1)} size={40} />
-                            &emsp;{blog.likes && blog.likes.length - 1}
-                            &emsp;&emsp;
-                            <ThumbsDownIcon cursor="pointer" onClick={() => handleOpinion(0)} size={40} />
 
-                            &emsp;{blog.dislikes.length - 1}
+                    <Pane display="flex" alignItems="center" justifyContent="left">
+                        <ThumbsUpIcon color={likeColor} display='inline' cursor="pointer" onClick={() => likeOrDislike("like")} size={40} />
+                        &emsp;<h2 style={{ display: 'inline' }}>{blog.likes && blog.likes.length - 1}</h2>
+                        &emsp;&emsp;
+                        <ThumbsDownIcon color={dislikeColor} display='inline' cursor="pointer" onClick={() => likeOrDislike("dislike")} size={40} />
+                        &emsp;<h2 style={{ display: 'inline' }}>{blog.dislikes.length - 1}</h2>
+                    </Pane>
 
-                            <br />
-                            <br />
-                            <br />
-                            <h1>Comments</h1>
-                            {
-                                blog.comments.map((comment, i) => {
-                                    if (i)
-                                        return (
-                                            <Pane elevation={3} height="50px" marginTop="10px" display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
-                                                {comment[0] + " written by " + comment[1]}
-                                            </Pane>
-                                        )
-                                })
-                            }
-                            <form onSubmit={addComment} >
-                                <Pane display="flex" justifyContent="center" alignItems="center" border="2px solid black" marginTop="30px">
-                                    <TextInputField ref={commentRef} width="80%" height="1" placeholder="Enter your comment" />
-                                    &emsp;
-                                    <button type="submit"><SendMessageIcon cursor="pointer" size={35} /></button>
-                                </Pane>
-                            </form>
-                        </>
-                    }
+                    <br />
+                    <br />
+                    <h2>Comments</h2>
+                    {showAndGetComments()}
                 </>
             )
             }
         </div >
     );
 }
+//TODO: isloading pe acha sa vhi dikhana 
 
 export default BlogDetails;
