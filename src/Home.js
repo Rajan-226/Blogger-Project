@@ -24,6 +24,8 @@ const Home = () => {
                     title: rawBlogs[id].title,
                     author: rawBlogs[id].author,
                     body: rawBlogs[id].body,
+                    createdDate: rawBlogs[id].createdDate,
+                    createdTime: rawBlogs[id].createdTime,
                     id: id
                 });
             }
@@ -56,7 +58,7 @@ const Home = () => {
                 {getSkeleton()}
                 {getSkeleton()}
             </div>}
-            {blogs && <BlogList blogs={blogs} title="" />}
+            {blogs && <BlogList blogs={blogs}/>}
 
         </div>
     );

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import TextEditor from "./TextEditor";
 import firebase from "./firebase";
 import { useAuth } from './provider/AuthContext';
+import { Input } from "@chakra-ui/input";
 
 const Create = () => {
     const { currentUser } = useAuth();
@@ -52,15 +53,11 @@ const Create = () => {
 
     return (
         <div className="create">
-            <h2>Add a new Blog</h2>
             <form onSubmit={handleSubmit}>
                 <label>Blog title:</label>
-                <input
-                    type="text"
-                    required
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+
+                <Input borderColor="" required onChange={(e) => setTitle(e.target.value)} placeholder="Enter the blog title"/>
+                
                 <br />
                 <label>Blog body:</label>
                 <br />

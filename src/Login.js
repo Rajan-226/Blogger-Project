@@ -1,11 +1,8 @@
 import React, { useRef, useState } from 'react'
-// import { Button, Pane, TextInputField, Heading, Alert } from 'evergreen-ui';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from './provider/AuthContext';
 import { Box, Button, Input, Divider, Alert, AlertIcon } from '@chakra-ui/react';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ErrorIcon from '@material-ui/icons/Error';
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react"
 
 
 function Login() {
@@ -17,7 +14,6 @@ function Login() {
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
     
-    const customTheme = extendTheme(withDefaultColorScheme({ colorScheme: "#EBEBEB" }));
     
     async function handleSubmit(e) {
         e.preventDefault();

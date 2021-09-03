@@ -1,20 +1,25 @@
 import { Link } from "react-router-dom";
-import { Tag } from '@chakra-ui/react';
+import { Tag, Box, Badge } from '@chakra-ui/react';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-const BlogList = ({ blogs, title }) => {
-    
+const BlogList = ({ blogs }) => {
+
     return (
         <div className="blog-list">
-            <h2>{title}</h2>
-            {blogs && blogs.map((blog) => (
-                <div className="blog-preview" key={blog.id}>
-                    <Link to={`/blogs/${blog.id}`}>
-                        <h2> {blog.title} </h2>
-                        {/* <p><Tag>Written by</Tag> {blog.author}</p> */}
-                        <p>{console.log(blog.createdTime)}</p>
-                        <p>{blog.createdTime}</p>
-                    </Link>
-                </div>
+            {blogs.map((blog) => (
+                <Link to={`/blogs/${blog.id}`}>
+                    <Box className="blog-preview" key={blog.id} display="flex" flexDirection="row" alignItems="center" justifyContent="space-between">
+                        <div>
+                            <h2> {blog.title} </h2>
+                            <AccountCircleIcon/><Badge fontSize="17px" color="#222831" background="#DDDDDD">{blog.author}</Badge>
+                        </div>
+                        <div style={{display:'flex',alignItems:"flex-end", flexDirection:"column"}}>
+                            <Badge fontSize="18px" marginBottom="5px" background="#DDDDDD" color="#B42B51">{blog.createdDate}</Badge>
+                            <Badge fontSize="large" colorScheme="orange" colorScheme="orange" variant="outline">{blog.createdTime}</Badge>
+                        </div>
+                    </Box>
+                </Link>
+
             ))}
         </div>
     );
