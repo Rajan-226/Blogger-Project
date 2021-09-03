@@ -3,7 +3,14 @@ import { useHistory } from 'react-router-dom';
 import TextEditor from "./TextEditor";
 import firebase from "./firebase";
 import { useAuth } from './provider/AuthContext';
-import { Input } from "@chakra-ui/input";
+import { Input, Box, Button } from "@chakra-ui/react";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import {
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+} from "@chakra-ui/react"
 
 const Create = () => {
     const { currentUser } = useAuth();
@@ -52,21 +59,24 @@ const Create = () => {
     }
 
     return (
-        <div className="create">
+        <div className="create" style={{ marginLeft: '-55px' }}>
             <form onSubmit={handleSubmit}>
-                <label>Blog title:</label>
+                <Box marginLeft="0px" width="800px" borderWidth="2px" borderColor="black" height="660px" paddingBottom="10px" display="flex" flexDirection="column" justifyContent="space-between" borderRadius="10px" padding="35px">
+                    <div>
+                        <label style={{ color: '#F05454', fontWeight: 'bold', fontSize: '20px', marginBottom: '5px' }}>Blog title:</label>
+                        <Input borderColor="" borderWidth="2px" required onChange={(e) => setTitle(e.target.value)} placeholder="Enter the blog title" />
+                    </div>
 
-                <Input borderColor="" required onChange={(e) => setTitle(e.target.value)} placeholder="Enter the blog title"/>
-                
-                <br />
-                <label>Blog body:</label>
-                <br />
+                    <div>
+                        <label style={{ color: '#F05454', fontWeight: 'bold', fontSize: '20px', marginBottom: '7px' }}>Blog Body:</label>
+                        <TextEditor setBody={setBody} lastValue={''} />
+                    </div>
 
-                <TextEditor setBody={setBody} lastValue={''} />
-                <br />
-
-                {!isPending && <button>Add Blog</button>}
-                {isPending && <button disabled>Adding Blog...</button>}
+                    <div >
+                        {!isPending && <Button type="submit" width="150px" height="50px" fontSize="17px" _hover={{ backgroundColor: '#F05454' }} leftIcon={<AddCircleIcon style={{ fill: 'white' }} />}>Add Blog</Button>}
+                        {isPending && <Button width="150px" height="50px" fontSize="17px" _hover={{ backgroundColor: '#F05454', }} isLoading >Adding Blog...</Button>}
+                    </div>
+                </Box>
             </form>
         </div>
     );

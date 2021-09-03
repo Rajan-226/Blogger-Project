@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap'); 
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Besley&display=swap');
 
 
 /* base styles */
@@ -88,12 +89,13 @@
 
 /* create new blog form */
 .create {
-  max-width: 700px;
+  max-width: 900px;
   margin: 0 auto;
   text-align: center;
 }
 .create label {
   text-align: left;
+  font-family: 'Besley', serif;
   display: block;
 }
 .create h2 {
@@ -147,4 +149,5 @@
 .ql-editor{
   min-height: 300px;
   max-height: 300px;
+  border-top: 2px solid black;
 }
