@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from './provider/AuthContext';
 import { Heading, Button } from "@chakra-ui/react"
-import { Pane } from 'evergreen-ui'
+
 const Navbar = () => {
 
     const { currentUser, logout } = useAuth();
@@ -13,7 +13,8 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <img height="50px" width="70px" style={{ display: 'inline' }} src="logo.png" />
+
+            <img height="50px" width="70px" style={{ display: 'inline' }} src="/logo.png" />
             <Link style={{ margin: '0' }} className="main" to="/"><Heading color="#222831">The Blogger</Heading></Link>
             <div className="links">
                 <Link to="/">Home</Link>

@@ -33,7 +33,7 @@ function TextEditor({ setBody, lastValue }) {
 
     return (
         <>
-            <ReactQuill placeholder="Type Here..." style={{ border: '2px solid black' }} value={value} theme="snow" modules={editorModules} onChange={setValue} />
+            <ReactQuill placeholder="Type Here..." style={{ border:'2px solid black', borderRadius:'10px' }} value={value} theme="snow" modules={editorModules} onChange={setValue} />
         </>
     );
 }

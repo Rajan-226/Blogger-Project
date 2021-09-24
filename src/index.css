@@ -64,11 +64,7 @@
 }
 
 /* blog details page */
-.blog-details h2 {
-  font-size: 30px;
-  color:#F05454;
-  margin-bottom: 10px;
-}
+
 
 .blog-details .create {
   margin: 20px 0;
@@ -150,4 +146,12 @@
   min-height: 300px;
   max-height: 300px;
   border-top: 2px solid black;
+}
+
+.ql-toolbar.ql-snow{
+    border:none !important;
+}
+
+.ql-container.ql-snow{
+    border:none !important;
 }

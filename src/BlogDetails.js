@@ -3,10 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import TextEditor from "./TextEditor";
 import firebase from "./firebase";
 import { useAuth } from './provider/AuthContext';
-import { ThumbsUpIcon, ThumbsDownIcon, toaster, Pane, SendMessageIcon} from 'evergreen-ui'
+import { ThumbsUpIcon, ThumbsDownIcon, toaster, Pane, SendMessageIcon } from 'evergreen-ui'
 import { Input, InputGroup, InputRightElement, Button } from "@chakra-ui/react"
 import { Skeleton } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import {  Badge } from '@chakra-ui/react';
 
 const BlogDetails = () => {
 
@@ -151,11 +153,13 @@ const BlogDetails = () => {
     }
 
     function getSkeleton() {
-        return (<div className="blog-preview">
-            <Skeleton height="30px" width="100%" marginBottom="20px" />
-            <Skeleton height="200px" width="100%" marginBottom="20px" />
-            <Skeleton height="100px" width="100%" />
-        </div>)
+        return (
+            <div>
+                <Skeleton height="30px" width="100%" marginBottom="20px" />
+                <Skeleton height="200px" width="100%" marginBottom="20px" />
+                <Skeleton height="100px" width="100%" />
+            </div>
+        )
     }
 
     return (
@@ -163,26 +167,30 @@ const BlogDetails = () => {
             {isPending && <div>{getSkeleton()}</div>}
             {blog && (
                 <>
-                    <article>
-                        <h2>{blog.title}</h2>
-                        <p>Written by <span className="authorName">{blog.author}</span></p><br />
-                        {editingMode && <TextEditor setBody={setNewBody} lastValue={blog.body} />}
-                        {
-                            !editingMode &&
-                            <Pane
-                                elevation={3} height="50px" border="default" display="flex"
-                                padding="10px"
-                                alignItems="center"
-                                dangerouslySetInnerHTML={{ __html: blog.body }} />
-                        }
+                    <article style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <h2 style={{ fontSize: "30px", color:"#F05454", marginBottom: "10px",fontFamily: "Besley" ,textTransform: "capitalize"}}>{blog.title}</h2>
+                        <div>
+                            <AccountCircleIcon /><Badge fontSize="17px" color="#222831" background="#DDDDDD">{blog.author}</Badge>
+                        </div>
                     </article>
+
+
+                    {editingMode && <TextEditor setBody={setNewBody} lastValue={blog.body} />}
+                    {
+                        !editingMode &&
+                        <Pane
+                            border="2px solid black"
+                            borderRadius="10px"
+                            padding="10px"
+                            dangerouslySetInnerHTML={{ __html: blog.body }} />
+                    }
 
                     <br />
 
                     {
                         currentUser && currentUser.uid === blog.id &&
                         <>
-                            {!editingMode && <Button size="md" bgColor="#30475E" color="white" leftIcon={<EditIcon />}  onClick={handleEdit}>Edit</Button>}
+                            {!editingMode && <Button size="md" bgColor="#30475E" color="white" leftIcon={<EditIcon />} onClick={handleEdit}>Edit</Button>}
                             {editingMode && <Button rightIcon={<ChevronRightIcon h="10" />} onClick={handleSubmit}>Submit</Button>}
                             &emsp;
                             <Button leftIcon={<DeleteIcon />} onClick={handleDelete}>Delete</Button>
@@ -209,6 +217,5 @@ const BlogDetails = () => {
         </div >
     );
 }
-//TODO: isloading pe acha sa vhi dikhana 
 
 export default BlogDetails;
