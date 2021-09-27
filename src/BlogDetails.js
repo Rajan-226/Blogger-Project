@@ -3,7 +3,15 @@ import { useState, useEffect, useRef } from "react";
 import TextEditor from "./TextEditor";
 import firebase from "./firebase";
 import { useAuth } from './provider/AuthContext';
-import { ThumbsUpIcon, ThumbsDownIcon, toaster, Pane, SendMessageIcon, TextInputField } from 'evergreen-ui'
+import { ThumbsUpIcon, ThumbsDownIcon, toaster, Pane, SendMessageIcon } from 'evergreen-ui'
+import { Input, InputGroup, InputRightElement, Button, Divider } from "@chakra-ui/react"
+import { Skeleton } from '@chakra-ui/react';
+import { EditIcon, DeleteIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { Badge } from '@chakra-ui/react';
+import CommentIcon from '@material-ui/icons/Comment';
+import { Collapse } from "@chakra-ui/transition";
+import * as Constants from './Constants';
 
 const BlogDetails = () => {
 
@@ -16,6 +24,9 @@ const BlogDetails = () => {
     const database = firebase.database().ref('blogs/' + id);
     const history = useHistory();
     const commentRef = useRef('');
+    const [likeColor, setLikeColor] = useState("gray");
+    const [dislikeColor, setDislikeColor] = useState("gray");
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
 
@@ -28,11 +39,25 @@ const BlogDetails = () => {
 
     }, []);
 
+    useEffect(() => {
+        if (!currentUser || !blog) return;
+
+        let likes = blog.likes;
+        let dislikes = blog.dislikes;
+
+        if (likes.indexOf(currentUser.uid) != -1) {
+            setLikeColor(Constants.primary_color);
+        } else if (dislikes.indexOf(currentUser.uid) != -1) {
+            setDislikeColor(Constants.primary_color);
+        }
+
+    }, [currentUser, database]);
+
+
     const handleDelete = () => {
         database.remove();
         history.push('/');
     }
-
 
     const handleEdit = () => {
         setEditingMode(true);
@@ -46,7 +71,7 @@ const BlogDetails = () => {
         setEditingMode(false);
     }
 
-    function addComment(e) {
+    function pushCommentToDatabase(e) {
         e.preventDefault();
         if (commentRef.current.value.length === 0) {
             toaster.warning('Comment cannot be empty', { id: 'forbidden-action' });
@@ -68,14 +93,25 @@ const BlogDetails = () => {
         e.target.reset();
     }
 
-    function handleOpinion(opinion) {
+    function likeOrDislike(choice) {
+        if (!currentUser) {
+            toaster.warning('Please log in first to ' + choice + ' this blog', { id: 'forbidden-action' });
+            return;
+        }
+        if (currentUser.uid === blog.id) {
+            toaster.warning('You cannot ' + choice + ' your own blog', { id: 'forbidden-action' });
+            return;
+        }
+
         let likes = blog.likes;
         let dislikes = blog.dislikes;
+
         if (likes.indexOf(currentUser.uid) != -1 || dislikes.indexOf(currentUser.uid) != -1) {
             toaster.warning('You cannot vote twice', { id: 'forbidden-action' });
             return;
         }
-        if (opinion === 1) {
+
+        if (choice === "like") {
             likes.push(currentUser.uid);
             database.update({
                 likes: likes
@@ -87,126 +123,108 @@ const BlogDetails = () => {
             });
         }
     }
+    
+    function handleOpen() {
+        setOpen(!open);
+    }
+
+    function showAndGetComments() {
+        return (
+            <>
+                {
+                    blog.comments.map((comment, i) => {
+                        if (i)
+                            return (
+                                <Pane  height="50px" paddingLeft="10px" paddingRight="10px" marginTop="10px" display="flex" alignItems="center" justifyContent="space-between" borderBottom="1px solid black" flexDirection="row" >
+                                    <div>{comment[0]}</div> 
+                                    <div><AccountCircleIcon /><Badge fontSize="15px" color={Constants.primary_color} background={Constants.background_color}>{comment[1]}</Badge></div>
+                                </Pane>
+                            )
+                    })
+                }
+                <form onSubmit={pushCommentToDatabase} >
+                    <InputGroup size="lg" marginTop="20px">
+                        <Input
+                            ref={commentRef}
+                            pr="4.5rem"
+                            borderColor="black"
+                            placeholder="Enter your comment"
+                        />
+                        <InputRightElement width="4.5rem">
+                            <Button type="submit" h="1.75rem" size="sm">
+                                <SendMessageIcon cursor="pointer" size={15} />
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                </form>
+            </>
+
+        );
+    }
+
+    function getSkeleton() {
+        return (
+            <div>
+                <Skeleton height="30px" width="100%" marginBottom="20px" />
+                <Skeleton height="200px" width="100%" marginBottom="20px" />
+                <Skeleton height="100px" width="100%" />
+            </div>
+        )
+    }
 
     return (
         <div className="blog-details">
-            {isPending && <div>Loading...</div>}
+            {isPending && <div>{getSkeleton()}</div>}
             {blog && (
                 <>
-                    <article>
-                        <h2>{blog.title}</h2>
-                        <p>Written by <span className="authorName">{blog.author}</span></p><br />
-                        {editingMode && <TextEditor setBody={setNewBody} lastValue={blog.body} />}
-                        {!editingMode && <div dangerouslySetInnerHTML={{ __html: blog.body }} />}
+                    <article style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <h2 style={{ fontSize: "30px", color: `${Constants.accent_color}`, marginBottom: "10px", fontWeight: 'Bold' ,fontFamily: "PT Sans Caption", textTransform: "capitalize" }}>{blog.title}</h2>
+                        <div>
+                            <AccountCircleIcon /><Badge fontSize="17px" color={Constants.primary_color} background={Constants.background_color}>{blog.author}</Badge>
+                        </div>
                     </article>
 
-                    <br />
+
+                    {editingMode && <TextEditor setBody={setNewBody} lastValue={blog.body} />}
                     {
-                        !currentUser &&
-                        <>
-                            <ThumbsUpIcon cursor="pointer" onClick={() => toaster.warning('Please log in first to like this blog', { id: 'forbidden-action' })} size={40} />
-                            &emsp;{blog.likes && blog.likes.length - 1}
-                            &emsp;&emsp;
-                            <ThumbsDownIcon cursor="pointer" onClick={() => toaster.warning('Please log in first to unlike this blog', { id: 'forbidden-action' })} size={40} />
-                            &emsp;{blog.dislikes.length - 1}
-
-                            <br />
-                            <br />
-                            <br />
-                            <h1>Comments</h1>
-                            {
-                                blog.comments && blog.comments.map((comment, i) => {
-                                    if (i)
-                                        return (
-                                            <Pane elevation={3} height="50px" marginTop="10px" display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
-                                                {comment[0] + " written by " + comment[1]}
-                                            </Pane>
-                                        )
-                                })
-                            }
-                            <form onSubmit={addComment} >
-                                <Pane display="flex" justifyContent="center" alignItems="center" border="2px solid black" marginTop="30px">
-                                    <TextInputField ref={commentRef} width="80%" height="1" placeholder="Enter your comment" />
-                                    &emsp;
-                                    <button type="submit"><SendMessageIcon cursor="pointer" size={35} /></button>
-                                </Pane>
-                            </form>
-
-                        </>
+                        !editingMode &&
+                        <Pane
+                            border="2px solid black"
+                            borderRadius="10px"
+                            backgroundColor="#F6F6F6"
+                            padding="10px"
+                            dangerouslySetInnerHTML={{ __html: blog.body }}
+                        />
                     }
+
+                    <br />
+
                     {
                         currentUser && currentUser.uid === blog.id &&
                         <>
-                            {!editingMode && <button id="delEdit" onClick={handleEdit}>Edit</button>}
-                            {editingMode && <button id="delEdit" onClick={handleSubmit}>Submit</button>}
+                            {!editingMode && <Button background={Constants.primary_color} color="white" width="100px" _hover={{ bg: Constants.accent_color }} leftIcon={<EditIcon />} onClick={handleEdit}>Edit</Button>}
+                            {editingMode && <Button background={Constants.primary_color} color="white" width="100px" _hover={{ bg: Constants.accent_color }} rightIcon={<ChevronRightIcon h="10" />} onClick={handleSubmit}>Submit</Button>}
                             &emsp;
-                            <button id="delEdit" onClick={handleDelete}>Delete</button>
+                            <Button background={Constants.primary_color} color="white" _hover={{ bg: Constants.accent_color }} leftIcon={<DeleteIcon color="white" />} onClick={handleDelete}>Delete</Button>
                             <br /><br /><br />
 
-                            <ThumbsUpIcon cursor="pointer" onClick={() => toaster.warning('You cannot like your own blog', { id: 'forbidden-action' })} size={40} />
-                            &emsp;{blog.likes && blog.likes.length - 1}
-                            &emsp;&emsp;
-                            <ThumbsDownIcon cursor="pointer" onClick={() => toaster.warning('You cannot unlike your own blog', { id: 'forbidden-action' })} size={40} />
-                            &emsp;{blog.dislikes.length - 1}
-
-                            <br />
-                            <br />
-                            <br />
-                            <h1>Comments</h1>
-
-                            {
-                                blog.comments.map((comment, i) => {
-                                    if (i)
-                                        return (
-                                            <Pane elevation={3} height="50px" marginTop="10px" display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
-                                                {comment[0] + " written by " + comment[1]}
-                                            </Pane>
-                                        )
-                                })
-                            }
-
-                            <form onSubmit={addComment} >
-                                <Pane display="flex" justifyContent="center" alignItems="center" border="2px solid black" marginTop="30px">
-                                    <TextInputField ref={commentRef} width="80%" height="1" placeholder="Enter your comment" />
-                                    &emsp;
-                                    <button type="submit"><SendMessageIcon cursor="pointer" size={35} /></button>
-                                </Pane>
-                            </form>
                         </>
                     }
-                    {
-                        currentUser && currentUser.uid !== blog.id &&
-                        <>
-                            <ThumbsUpIcon cursor="pointer" onClick={() => handleOpinion(1)} size={40} />
-                            &emsp;{blog.likes && blog.likes.length - 1}
-                            &emsp;&emsp;
-                            <ThumbsDownIcon cursor="pointer" onClick={() => handleOpinion(0)} size={40} />
-
-                            &emsp;{blog.dislikes.length - 1}
-
-                            <br />
-                            <br />
-                            <br />
-                            <h1>Comments</h1>
-                            {
-                                blog.comments.map((comment, i) => {
-                                    if (i)
-                                        return (
-                                            <Pane elevation={3} height="50px" marginTop="10px" display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
-                                                {comment[0] + " written by " + comment[1]}
-                                            </Pane>
-                                        )
-                                })
-                            }
-                            <form onSubmit={addComment} >
-                                <Pane display="flex" justifyContent="center" alignItems="center" border="2px solid black" marginTop="30px">
-                                    <TextInputField ref={commentRef} width="80%" height="1" placeholder="Enter your comment" />
-                                    &emsp;
-                                    <button type="submit"><SendMessageIcon cursor="pointer" size={35} /></button>
-                                </Pane>
-                            </form>
-                        </>
-                    }
+                    <Pane display="flex" alignItems="center" justifyContent="left">
+                        <ThumbsUpIcon color={likeColor} style={{ height: '20px' }} display='inline' cursor="pointer" onClick={() => likeOrDislike("like")} size={40} />
+                        <h2 style={{ display: 'inline' }}>{blog.likes && blog.likes.length - 1}</h2>
+                        &emsp;
+                        <ThumbsDownIcon color={dislikeColor} style={{ height: '20px' }} display='inline' cursor="pointer" onClick={() => likeOrDislike("dislike")} size={40} />
+                        <h2 style={{ display: 'inline' }}>{blog.dislikes.length - 1}</h2>
+                        &emsp;
+                        <CommentIcon style={{ fill: Constants.primary_color }} cursor="pointer" onClick={handleOpen} />
+                        &nbsp;
+                        &nbsp;
+                        {blog.comments.length - 1}
+                    </Pane>
+                    <Collapse in={open}>
+                        {showAndGetComments()}
+                    </Collapse>
                 </>
             )
             }
