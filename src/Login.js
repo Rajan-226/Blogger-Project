@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from './provider/AuthContext';
 import { Box, Button, Input, Divider, Alert, AlertIcon } from '@chakra-ui/react';
 import ErrorIcon from '@material-ui/icons/Error';
+import * as Constants from './Constants';
 
 
 function Login() {
@@ -34,18 +35,18 @@ function Login() {
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <form onSubmit={handleSubmit}>
-                <Box background="#EBEBEB" display="flex" borderWidth="2px" paddingBottom="10px" borderRadius="10px" paddingLeft="30px" paddingRight="30px" height="60vh" width="60vh" flexDirection="column" alignItems="center" justifyContent="space-evenly" maxW="sm" overflow="hidden">
+                <Box background={Constants.light_white} display="flex" borderWidth="2px" borderColor={Constants.primary_color} paddingBottom="10px" borderRadius="10px" paddingLeft="30px" paddingRight="30px" height="60vh" width="60vh" flexDirection="column" alignItems="center" justifyContent="space-evenly" maxW="sm" overflow="hidden">
                     {error.length > 0 && <Alert status="error" variant="left-accent">
                         <ErrorIcon style={{ fill: 'red' }} />
                         {error}
                     </Alert>}
-                    <span style={{ fontSize: '30px', fontWeight: 'bold', background: '#EBEBEB' }}>LOGIN</span>
+                    <span style={{ background: Constants.light_white, fontFamily: 'PT Sans Caption', color: Constants.accent_color,fontSize: '30px', fontWeight: 'bold' }}>Login</span>
                     <Input borderColor="" ref={emailRef} type="email" placeholder="Email" />
                     <Input borderColor="" ref={passwordRef} type="password" placeholder="Password" />
 
-                    <div style={{ width: "100%", background:"#EBEBEB", display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", marginTop: '10px' }}>
-                        <Button display="flex" _hover={{ bg: '#F05454' }} type="submit" isLoading={isLoading}  justifyContent="center" background="#000E4A" color="white" width="100%" height="50px" fontSize="20px">Log In</Button>
-                        <Link style={{ marginTop: '15px' }} to="/signup">Need an account?</Link>
+                    <div style={{ width: "100%", background: Constants.light_white, display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", marginTop: '10px' }}>
+                        <Button display="flex" _hover={{ bg: Constants.accent_color }} type="submit" isLoading={isLoading}  justifyContent="center" background={Constants.primary_color} color="white" width="100%" height="50px" fontSize="20px">Log In</Button>
+                        <Link style={{ marginTop: '15px', color: Constants.primary_color }} to="/signup">Need an account?</Link>
                     </div>
                 </Box>
             </form>

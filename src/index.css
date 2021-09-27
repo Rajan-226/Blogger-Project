@@ -1,13 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap'); 
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT Sans Caption:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Besley&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans+Caption:wght@400;700&display=swap');
 
+:root {
+  --background-color-const: #EAEAEA;
+  --accent-color: #FF2E63;
+}
 
 /* base styles */
 * {
   margin: 0;
   font-family: "Quicksand";
-  color: #333;
+}
+
+#body_id {
+  background-color: var(--background-color-const);
 }
 
 .navbar {
@@ -22,20 +32,21 @@
 
 
 .navbar .main {
-  color: #F05454;
+  color: var(--accent-color);
 }
 .navbar .links {
   margin-left: auto;
 }
 .navbar a {
   font-size: 20px;
+  font-family: 'Lato';
   font-weight: 700;
   margin-left: 16px;
   text-decoration: none;
   padding: 6px;
 }
 .navbar a:hover {
-  color: #F05454;
+  color: var(--accent-color);
 }
 .content {
   max-width: 700px;
@@ -53,8 +64,8 @@
 }
 .blog-preview h2 {
   font-size: 25px;
-  font-family: 'Merriweather', serif;
-  color: #F05454;
+  font-family: 'PT Sans Caption', serif;
+  color: var(--accent-color);
   margin-bottom: 10px;
   font-weight: bold;
 }
@@ -70,7 +81,7 @@
   margin: 20px 0;
 }
 .blog-details #delEdit {
-  background: #FF4C29;
+  background: var(--accent-color);
   color: #fff;
   border: 0;
   padding: 8px;
@@ -79,7 +90,7 @@
 }
 .blog-details .authorName{
     font-size: 24px;
-    color:#F05454;
+    color: var(--accent-color);
     font-weight: bold;
 }
 
@@ -91,24 +102,24 @@
 }
 .create label {
   text-align: left;
-  font-family: 'Besley', serif;
+  font-family: 'PT Sans Caption', serif;
   display: block;
 }
 .create h2 {
   font-size: 20px;
-  color: #F05454;
+  color: var(--accent-color);
   margin-bottom: 30px;
 }
 .create textarea, .create select {
   width: 100%;
   padding: 6px 10px;
   margin: 10px 0;
-  border: 1px solid #ddd;
+  border: 1px solid var(--background-color);
   box-sizing: border-box;
   display: block;
 }
 .create button {
-  background: #F05454;
+  /* background: var(--accent-color); */
   color: #fff;
   border: 0;
   padding: 8px;
@@ -116,14 +127,14 @@
   cursor: pointer;
 }
 .not-found h1{
-    color: #F05454;
+    color: var(--accent-color);
     font-size:100px;
 }
 .not-found p{
     font-size:30px;
 }
 .userName{
-    color: #F05454;
+    color: var(--accent-color);
     font-size:25px;
     margin-bottom: 5px;
 }
@@ -133,7 +144,7 @@
     margin-bottom: 20px;
 }
 .userDelete {
-    background: #F05454;
+    background: var(--accent-color);
     color: #fff;
     border: 0;
     padding: 6px;

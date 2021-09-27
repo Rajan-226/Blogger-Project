@@ -4,11 +4,14 @@ import TextEditor from "./TextEditor";
 import firebase from "./firebase";
 import { useAuth } from './provider/AuthContext';
 import { ThumbsUpIcon, ThumbsDownIcon, toaster, Pane, SendMessageIcon } from 'evergreen-ui'
-import { Input, InputGroup, InputRightElement, Button } from "@chakra-ui/react"
+import { Input, InputGroup, InputRightElement, Button, Divider } from "@chakra-ui/react"
 import { Skeleton } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import {  Badge } from '@chakra-ui/react';
+import { Badge } from '@chakra-ui/react';
+import CommentIcon from '@material-ui/icons/Comment';
+import { Collapse } from "@chakra-ui/transition";
+import * as Constants from './Constants';
 
 const BlogDetails = () => {
 
@@ -23,6 +26,7 @@ const BlogDetails = () => {
     const commentRef = useRef('');
     const [likeColor, setLikeColor] = useState("gray");
     const [dislikeColor, setDislikeColor] = useState("gray");
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
 
@@ -42,9 +46,9 @@ const BlogDetails = () => {
         let dislikes = blog.dislikes;
 
         if (likes.indexOf(currentUser.uid) != -1) {
-            setLikeColor("blue");
+            setLikeColor(Constants.primary_color);
         } else if (dislikes.indexOf(currentUser.uid) != -1) {
-            setDislikeColor("blue");
+            setDislikeColor(Constants.primary_color);
         }
 
     }, [currentUser, database]);
@@ -119,6 +123,10 @@ const BlogDetails = () => {
             });
         }
     }
+    
+    function handleOpen() {
+        setOpen(!open);
+    }
 
     function showAndGetComments() {
         return (
@@ -127,17 +135,19 @@ const BlogDetails = () => {
                     blog.comments.map((comment, i) => {
                         if (i)
                             return (
-                                <Pane elevation={1} height="50px" marginTop="10px" display="flex" alignItems="center" flexDirection="column" justifyContent="center" border="default">
-                                    {comment[0] + " written by " + comment[1]}
+                                <Pane  height="50px" paddingLeft="10px" paddingRight="10px" marginTop="10px" display="flex" alignItems="center" justifyContent="space-between" borderBottom="1px solid black" flexDirection="row" >
+                                    <div>{comment[0]}</div> 
+                                    <div><AccountCircleIcon /><Badge fontSize="15px" color={Constants.primary_color} background={Constants.background_color}>{comment[1]}</Badge></div>
                                 </Pane>
                             )
                     })
                 }
                 <form onSubmit={pushCommentToDatabase} >
-                    <InputGroup size="md" marginTop="20px">
+                    <InputGroup size="lg" marginTop="20px">
                         <Input
                             ref={commentRef}
                             pr="4.5rem"
+                            borderColor="black"
                             placeholder="Enter your comment"
                         />
                         <InputRightElement width="4.5rem">
@@ -168,9 +178,9 @@ const BlogDetails = () => {
             {blog && (
                 <>
                     <article style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <h2 style={{ fontSize: "30px", color:"#F05454", marginBottom: "10px",fontFamily: "Besley" ,textTransform: "capitalize"}}>{blog.title}</h2>
+                        <h2 style={{ fontSize: "30px", color: `${Constants.accent_color}`, marginBottom: "10px", fontWeight: 'Bold' ,fontFamily: "PT Sans Caption", textTransform: "capitalize" }}>{blog.title}</h2>
                         <div>
-                            <AccountCircleIcon /><Badge fontSize="17px" color="#222831" background="#DDDDDD">{blog.author}</Badge>
+                            <AccountCircleIcon /><Badge fontSize="17px" color={Constants.primary_color} background={Constants.background_color}>{blog.author}</Badge>
                         </div>
                     </article>
 
@@ -181,8 +191,10 @@ const BlogDetails = () => {
                         <Pane
                             border="2px solid black"
                             borderRadius="10px"
+                            backgroundColor="#F6F6F6"
                             padding="10px"
-                            dangerouslySetInnerHTML={{ __html: blog.body }} />
+                            dangerouslySetInnerHTML={{ __html: blog.body }}
+                        />
                     }
 
                     <br />
@@ -190,27 +202,29 @@ const BlogDetails = () => {
                     {
                         currentUser && currentUser.uid === blog.id &&
                         <>
-                            {!editingMode && <Button size="md" bgColor="#30475E" color="white" leftIcon={<EditIcon />} onClick={handleEdit}>Edit</Button>}
-                            {editingMode && <Button rightIcon={<ChevronRightIcon h="10" />} onClick={handleSubmit}>Submit</Button>}
+                            {!editingMode && <Button background={Constants.primary_color} color="white" width="100px" _hover={{ bg: Constants.accent_color }} leftIcon={<EditIcon />} onClick={handleEdit}>Edit</Button>}
+                            {editingMode && <Button background={Constants.primary_color} color="white" width="100px" _hover={{ bg: Constants.accent_color }} rightIcon={<ChevronRightIcon h="10" />} onClick={handleSubmit}>Submit</Button>}
                             &emsp;
-                            <Button leftIcon={<DeleteIcon />} onClick={handleDelete}>Delete</Button>
+                            <Button background={Constants.primary_color} color="white" _hover={{ bg: Constants.accent_color }} leftIcon={<DeleteIcon color="white" />} onClick={handleDelete}>Delete</Button>
                             <br /><br /><br />
 
                         </>
                     }
-
                     <Pane display="flex" alignItems="center" justifyContent="left">
-                        <ThumbsUpIcon color={likeColor} display='inline' cursor="pointer" onClick={() => likeOrDislike("like")} size={40} />
-                        &emsp;<h2 style={{ display: 'inline' }}>{blog.likes && blog.likes.length - 1}</h2>
-                        &emsp;&emsp;
-                        <ThumbsDownIcon color={dislikeColor} display='inline' cursor="pointer" onClick={() => likeOrDislike("dislike")} size={40} />
-                        &emsp;<h2 style={{ display: 'inline' }}>{blog.dislikes.length - 1}</h2>
+                        <ThumbsUpIcon color={likeColor} style={{ height: '20px' }} display='inline' cursor="pointer" onClick={() => likeOrDislike("like")} size={40} />
+                        <h2 style={{ display: 'inline' }}>{blog.likes && blog.likes.length - 1}</h2>
+                        &emsp;
+                        <ThumbsDownIcon color={dislikeColor} style={{ height: '20px' }} display='inline' cursor="pointer" onClick={() => likeOrDislike("dislike")} size={40} />
+                        <h2 style={{ display: 'inline' }}>{blog.dislikes.length - 1}</h2>
+                        &emsp;
+                        <CommentIcon style={{ fill: Constants.primary_color }} cursor="pointer" onClick={handleOpen} />
+                        &nbsp;
+                        &nbsp;
+                        {blog.comments.length - 1}
                     </Pane>
-
-                    <br />
-                    <br />
-                    <h2>Comments</h2>
-                    {showAndGetComments()}
+                    <Collapse in={open}>
+                        {showAndGetComments()}
+                    </Collapse>
                 </>
             )
             }
