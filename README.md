@@ -28,25 +28,25 @@ It uses Firebase Realtime Database as well as the Firebase authentication packag
 
 ## Local Environment Setup
 - Clone repository by running this command on git-bash
-
+```
     git clone https://github.com/Rajan-226/Blogger-Project.git
-
+```
 
 - Run command `cd Blogger-Project`
 
 - Install Dependencies using
-
+```
     npm install
-
+```
 - Run this command to start the project.
-
+```
     npm run start
-
+```
 
 - Open link to view the website in your browser window if it doesn't open automatically.
-
+```
     http://localhost:3000/
- 
+```
 - That's all, now just Sign Up and compose your own Blogs.
 <br>
 <br>
