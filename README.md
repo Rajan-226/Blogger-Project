@@ -32,8 +32,10 @@ It uses Firebase Realtime Database as well as the Firebase authentication packag
     git clone https://github.com/Rajan-226/Blogger-Project.git
 ```
 
-- Run command `cd Blogger-Project`
-
+- Change directory using the following command
+```
+    cd Blogger-Project
+```
 - Install Dependencies using
 ```
     npm install
